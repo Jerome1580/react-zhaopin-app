@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore , applyMiddleware , compose} from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux'
-import { counter , add_Gun , remove_Gun , add_GunAsync } from './index.redux.index.js'
+import { counter  } from './index.redux.index.js'
 
 import './index.css';
 import App from './App';
