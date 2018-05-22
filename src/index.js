@@ -1,20 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import { counter , add_Gun , remove_Gun } from './index.redux.index.js'
+import { createStore , applyMiddleware , compose} from 'redux';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux'
+import { counter , add_Gun , remove_Gun , add_GunAsync } from './index.redux.index.js'
 
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-const store = createStore(counter)
+const reduxDevtools = window.devToolsExtension?window.devToolsExtension():()=>{}
+const store = createStore(counter,compose(
+    applyMiddleware(thunk),
+    reduxDevtools
+    ))
 
-function render(){
-    ReactDOM.render(<App store={store} ADD_GUN={add_Gun} REMOVE_GUN={remove_Gun}/>, document.getElementById('root'));
-}
 
-render()
-store.subscribe(render)
+ReactDOM.render(
+( <Provider store={store}>
+    <App />
+</Provider> )
+, document.getElementById('root'));
 
 
 registerServiceWorker();
