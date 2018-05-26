@@ -5,7 +5,7 @@ import { add_Gun , remove_Gun , add_GunAsync } from './index.redux.index.js'
 import './App.css';
 
 @connect(
-    state => ({num: state}),
+    state => ({num: state.counter}),
     {add_Gun, remove_Gun, add_GunAsync}
 )
 class App extends Component {
