@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import {login} from './Auth.redux'
+import {login ,getUser} from './Auth.redux'
 
 @connect(
     state =>state.auth,
-    {login}
+    {login, getUser}
 )
 class Auth extends React.Component {
     render() {

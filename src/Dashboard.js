@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link , Route , Redirect} from 'react-router-dom'
 import { connect } from 'react-redux'
-import { logout } from './Auth.redux'
+import { logout,getUser } from './Auth.redux'
 
 import App from './App';
 
@@ -16,14 +16,18 @@ function qibinglian() {
 
 @connect(
     state => state.auth,
-    {logout}
+    {logout, getUser}
 )
 class Dashboard extends React.Component {
+    componentDidMount() {
+        this.props.getUser()
+    }
     render() {
         const match = this.props.match;
         const redireatToLogin = <Redirect to="/login"/>;
         const app = (<div>
             {this.props.isAuth ? <button onClick={this.props.logout}>注销</button> : null}
+            <div>我的名字是：{this.props.user}我的年龄是{this.props.age}</div>
             <ul>
                 <li>
                     <Link to={`${match.url}`}>一营</Link>
