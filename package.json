@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "antd-mobile": "^2.1.10",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
     "babel-core": "6.26.0",
@@ -94,6 +95,13 @@
       "react-app"
     ],
     "plugins": [
+      [
+        "import",
+        {
+          "libraryName": "antd-mobile",
+          "style": "css"
+        }
+      ],
       "transform-decorators-legacy"
     ]
   },
@@ -101,6 +109,9 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "babel-plugin-import": "^1.7.0",
+    "cookie-parse": "^0.4.0",
+    "express": "^4.16.3",
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.6"
   }
