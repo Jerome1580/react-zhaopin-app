@@ -14,9 +14,9 @@ const initState = {
 export function user(state = initState, action) {
     switch (action.type) {
         case REGISTER_SUCCESS:
-            return {...state, msg: '', isAuth: true, ...action.payload}
+            return {...state, msg: '', isAuth: true, ...action.payload};
         case ERROR_MSG:
-            return {...state, msg: action.msg, isAuth: false}
+            return {...state, msg: action.msg, isAuth: false};
         default:
             return state
     }
@@ -31,6 +31,7 @@ function errorMsg(msg) {
 
 }
 
+// action Creator
 export function register({user,pwd,repeatpwd,type}) {
     if (!user || !pwd || !type) {
         return errorMsg('用户名密码必须输入')
