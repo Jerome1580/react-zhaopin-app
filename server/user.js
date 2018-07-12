@@ -12,9 +12,24 @@ Router.get('/list', (req, res) => {
     })
 });
 
+Router.post('/update', (req, res) => {
+    const {userid} = req.cookies;
+    if (!userid) {
+        return res.dumps({code: 1})
+    }
+    const body = req.body;
+    User.findByIdAndUpdate(userid, body, (err, doc) => {
+        // 因为node没有添加支持es6的，所以用Object.assign
+        const data = Object.assign({}, {
+            user: doc.user,
+            type: doc.type,
+        }, body)
+        res.json({code: 0, data})
+    })
+})
+
 Router.post('/register', (req, res) => {
-    const {user, pwd, type} = req.body
-    // return res.json({code: 0})
+    const {user, pwd, type} = req.body;
     User.findOne({user: user}, function (err, doc) {
         if (doc) {
             return res.json({code: 1, msg: '用户名重复'})
@@ -33,7 +48,6 @@ Router.post('/register', (req, res) => {
 
 Router.post('/login', (req, res) => {
     const {user, pwd} = req.body;
-    // return res.json({code: 0})
     User.findOne({user, pwd: md5Pwd(pwd)}, _filter, function (err, doc) {
         if (!doc) {
             return res.json({code: 1, msg: '用户名不存在或者密码错误'});
@@ -44,7 +58,7 @@ Router.post('/login', (req, res) => {
 });
 
 Router.get('/info', (req, res)=> {
-    const {userid} = req.cookies
+    const {userid} = req.cookies;
     if (!userid) {
         return res.json({code: 1})
     }
@@ -53,11 +67,9 @@ Router.get('/info', (req, res)=> {
             return res.json({code: 1, msg: '后端出错了'})
         }
         if (doc) {
-            return res.json({code: 0, data: {}})
+            return res.json({code: 0, data: doc})
         }
-
     })
-    return res.json({code: 1})
 });
 
 function md5Pwd(pwd) {
