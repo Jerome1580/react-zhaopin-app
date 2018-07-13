@@ -3,6 +3,7 @@ const utils = require('utility'); // md5加密
 const Router = express.Router();
 const model = require('./model');
 const User = model.getModel('user');
+const Chat = model.getModel('chat');
 const _filter = {'pwd': 0, '__v': 0}
 
 Router.get('/list', (req, res) => {
@@ -69,6 +70,17 @@ Router.get('/info', (req, res)=> {
         }
         if (doc) {
             return res.json({code: 0, data: doc})
+        }
+    })
+});
+
+// 获取聊天信息
+Router.get('/getmsglist', (req, res) => {
+    const {userid} = req.cookies;
+    // {'$or':[{'from':userid,'to':userid}]}
+    Chat.find({}, (err, doc) => {
+        if (!err) {
+            return res.json({code: 0, msgs: doc})
         }
     })
 });

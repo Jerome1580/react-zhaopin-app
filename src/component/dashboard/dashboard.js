@@ -4,10 +4,10 @@ import {NavBar} from 'antd-mobile'
 import {Switch, Route} from 'react-router-dom'
 import NavLinkBar from '../navlink/navlink'
 import Boss from '../boss/boss'
+import Genius from '../genius/genius'
+import User from '../user/user'
 
-const Genius = () => (<h3>牛人列表</h3>)
 const Msg = () => (<h3>Msg</h3>)
-const User = () => (<h3>User</h3>)
 
 @connect(
     state => state

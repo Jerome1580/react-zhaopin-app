@@ -7,13 +7,13 @@ import {getUserList} from '../../redux/chatuser.redux';
     state => state.chatuser,
     {getUserList}
 )
-export default class Boss extends Component {
+export default class Genius extends Component {
 
     render() {
         return <UserCard userlist={this.props.userlist}/>
     }
 
     componentDidMount() {
-        this.props.getUserList('genius')
+        this.props.getUserList('boss')
     }
 }

@@ -18,6 +18,7 @@ import GeniusInfo from './container/geniusinfo/geniusinfo'
 import Register from './container/register/register'
 import AuthRoute from './component/authroute/authroute'
 import Dashboard from "./component/dashboard/dashboard";
+import Chat from "./component/chat/chat";
 
 // 调用日志打印方法 collapsed是让action折叠，看着舒服点
 const loggerMiddleware = createLogger({
@@ -27,8 +28,7 @@ const loggerMiddleware = createLogger({
 // 创建一个中间件集合
 const middleware = [thunk, loggerMiddleware];
 
-const reduxDevtools = window.devToolsExtension ? window.devToolsExtension() : ()=> {
-};
+const reduxDevtools = window.devToolsExtension ? window.devToolsExtension() : f => f;
 const store = createStore(reducers, compose(
     applyMiddleware(...middleware),
     reduxDevtools
@@ -45,6 +45,7 @@ ReactDOM.render(
                 <Route path="/bossinfo" component={BossInfo}/>
                 <Route path="/login" component={Login}/>
                 <Route path="/register" component={Register}/>
+                <Route path="/chat/:user" component={Chat}/>
                 <Route component={Dashboard}/>
             </Switch>
         </div>
