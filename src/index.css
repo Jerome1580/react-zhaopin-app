@@ -31,7 +31,8 @@
 }
 
 .stick-footer {
-    position: fixed;
+    z-index: 10;
+    position: absolute;
     bottom: 0;
     width: 100%;
 }

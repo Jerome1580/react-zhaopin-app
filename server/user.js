@@ -5,7 +5,6 @@ const model = require('./model');
 const User = model.getModel('user');
 const Chat = model.getModel('chat');
 const _filter = {'pwd': 0, '__v': 0}
-
 Router.get('/list', (req, res) => {
     // User.remove({}, function (err, doc) {})  // 清楚所有数据
     const {type} = req.query
