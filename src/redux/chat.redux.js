@@ -35,6 +35,7 @@ function msgRecv(msg) {
     return {type: MSG_RECV, payload: msg}
 }
 
+// 发送聊天信息到后端
 export function sendMsg({from, to, msg}) {
     return dispatch => {
         socket.emit('sendmsg', {from, to, msg})
@@ -42,10 +43,10 @@ export function sendMsg({from, to, msg}) {
 
 }
 
+// 接收聊天信息
 export function recvMsg() {
     return dispatch => {
         socket.on('recvmsg', function (data) {
-            console.log('recvmsg', data);
             dispatch(msgRecv(data))
         })
     }
