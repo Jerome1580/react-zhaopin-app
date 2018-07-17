@@ -76,12 +76,21 @@ Router.get('/info', (req, res)=> {
 // 获取聊天信息
 Router.get('/getmsglist', (req, res) => {
     const {userid} = req.cookies;
-    // {'$or':[{'from':userid,'to':userid}]}
-    Chat.find({}, (err, doc) => {
-        if (!err) {
-            return res.json({code: 0, msgs: doc})
-        }
+
+    User.find({}, (err, doc) => {
+        let users = {}
+        doc.forEach(v => {
+            users[v._id] = {name: v.user, avatar: v.avatar}
+        })
+
+        // {'$or':[{'from':userid,'to':userid}]}
+        Chat.find({'$or': [{'from': userid}, {'to': userid}]}, (err, doc) => {
+            if (!err) {
+                return res.json({code: 0, msgs: doc, users})
+            }
+        })
     })
+
 });
 
 function md5Pwd(pwd) {
