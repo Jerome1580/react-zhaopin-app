@@ -93,6 +93,25 @@ Router.get('/getmsglist', (req, res) => {
 
 });
 
+// 已读信息
+Router.post('/readmsg', (req, res) => {
+    const {userid} = req.cookies;
+    const {from} = req.body
+    console.log(userid, from);
+    Chat.update(
+        {from, to: userid},
+        {'$set': {read: true}},
+        {'multi': true},  // 默认修改1行，加上multi可以修改多行
+        (err, doc) => {
+            console.log(doc);
+            if (!err) {
+                return res.json({code: 0, num: doc.nModified})
+            }
+            return res.json({code: 1, msgs: '修改失败'})
+        })
+
+
+});
 function md5Pwd(pwd) {
     const salt = 'immoc_raoju_355@qqq09983m^%#&#@#'
     return utils.md5(utils.md5(pwd + salt))

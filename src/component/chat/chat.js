@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import {List, InputItem, NavBar, Icon, Grid} from 'antd-mobile'
 import io from 'socket.io-client'
 import {connect} from 'react-redux'
-import {getMsgList, sendMsg, recvMsg} from '../../redux/chat.redux'
+import {getMsgList, sendMsg, recvMsg, readMsg} from '../../redux/chat.redux'
 import {getChatId} from "../../util";
 
 
 @connect(
     state => state,
-    {getMsgList, sendMsg, recvMsg}
+    {getMsgList, sendMsg, recvMsg, readMsg}
 )
 export default class Chat extends Component {
 
@@ -22,6 +22,11 @@ export default class Chat extends Component {
             this.props.getMsgList()
             this.props.recvMsg()
         }
+    }
+
+    componentWillUnmount() {
+        const to = this.props.match.params.user
+        this.props.readMsg(to)
     }
 
     state = {text: '', msg: [], showEmoji: false}
