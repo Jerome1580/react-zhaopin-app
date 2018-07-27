@@ -3,9 +3,28 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import model from './model'
 import path from 'path';
+import csshook from 'css-modules-require-hook/preset'
+import assethook from 'asset-require-hook'
+
+assethook({
+    extensions: ['png']
+});
 
 import React from 'react'
+import {createStore, applyMiddleware, compose} from 'redux';
+import thunk from 'redux-thunk';
+import {StaticRouter} from 'react-router-dom'
+import {Provider} from 'react-redux'
+/*import App from '../src/app'*/
+import reducers from "../src/reducer";
 import {renderToString, renderToStaticMarkup} from 'react-dom/server'
+import staticPath from '../build/asset-manifest'
+
+console.log(staticPath);
+
+
+
+
 // react 组件 => div
 const Chat = model.getModel('chat');
 const app = express();
@@ -31,20 +50,6 @@ io.on('connection', function (socket) {
 
 const userRoute = require('./user');
 
-function App() {
-    return (
-        <div>
-            <h2>server rendder</h2>
-            <h2>server rendder</h2>
-        </div>
-    )
-}
-
-console.log(renderToString(App()));
-// <div data-reactroot=""><h2>server rendder</h2><h2>server rendder</h2></div>
-
-console.log(App);
-
 app.use(cookieParser());
 app.use(bodyParser.json());
 
@@ -53,6 +58,51 @@ app.use((req, res, next) => {
     if (req.url.startsWith('/user/') || req.url.startsWith('/static/')) {
         return next()
     }
+
+    const store = createStore(reducers, compose(
+        applyMiddleware(thunk)
+    ));
+
+    let context = {}  // 路由有跳转context会告诉我们跳转
+    const markup = renderToString(
+        (<Provider store={store}>
+            <StaticRouter
+                location={req.url}
+                context={context}
+            >
+                {/*<App></App>*/}
+            </StaticRouter>
+        </Provider>)
+    )
+
+    // 做seo
+    const seo = {
+        '/msg': 'React,redux,聊天',
+        '/boss': 'boss页面'
+    }
+
+    const Pagehtml = `
+        <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+                <meta name="theme-color" content="#000000">
+                <meta name="description" content=${seo[req.url]}>
+                <link rel="manifest" href="/manifest.json">
+                <link rel="shortcut icon" href="/favicon.ico">
+                <title>React App</title>
+                <link href="/${staticPath['main.css']}" rel="stylesheet">
+            </head>
+            <body>
+            <noscript>You need to enable JavaScript to run this app.</noscript>
+            <div id="root">${markup}</div>
+            <script type="text/javascript" src="/${staticPath['main.js']}"></script>
+            </body>
+            </html>`
+
+
+    //res.send(Pagehtml)
     return res.sendFile(path.resolve('build/index.html'))
 })
 
